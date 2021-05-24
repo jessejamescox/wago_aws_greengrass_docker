@@ -43,6 +43,6 @@ RUN apt update && apt upgrade -y && apt install build-essential zlib1g-dev \
 # download and extract the runtime files    
 RUN curl -s ${GREENGRASS_RELEASE_URI} > \
     greengrass-nucleus-latest.zip && unzip greengrass-nucleus-latest.zip -d GreengrassCore &&\
-    chmod +x /greengrass-entrypoint.sh
+    rm /greengrass-nucleus-latest.zip  && chmod +x /greengrass-entrypoint.sh
 
 ENTRYPOINT ["/greengrass-entrypoint.sh"]
