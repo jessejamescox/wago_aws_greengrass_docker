@@ -2,113 +2,40 @@
 # Running AWS IoT Greengrass Core V2 on WAGO Quad-Core ARM Platform Docker Container  
   
 ## Prerequisites  
-* WAGO Edge Controller, WAGO TP600, or WAGO Edge Computer with Docker Engine installed 
+* WAGO Edge Controller or WAGO TP600 with Docker Engine installed 
 * The Docker Engine ipk (version 20.10 or later) can be found [here](https://github.com/WAGO/docker-ipk ).
   
 ## Running AWS IoT Greengrass in a Docker Container  
 The following steps show how to build the Docker image from the Dockerfile and configure AWS IoT Greengrass to run in a Docker container.  
-  
-  
-  
-### Step 1. Build the AWS IoT Greengrass Docker Image    
-**1.1** Download and decompress the `aws-greengrass-docker-2.1.0` package.  
-  
-**1.2** In a terminal, run the following commands in the location where you decompressed the `aws-greengrass-docker-2.1.0` package.  
+   
+### Step 1. Build the AWS IoT Greengrass Docker Image on the WAGO Edge Controller or TP600     
+**1.1** Download and decompress the `wago_aws_greengrass_docker` package.  It is advised that you configure the Docker engine to mount to the SD card.  In a terminal run:
 ```  
-cd ~/Downloads/aws-greengrass-docker-2.1.0  
-sudo docker build -t "x86_64/aws-iot-greengrass:2.1.0" ./  
+cd /media/docker 
+wget https://github.com/jessejamescox/wago_aws_greengrass_docker/archive/refs/heads/main.zip && unzip wago_aws_greengrass_docker-main.zip && rm wago_aws_greengrass_docker-main.zip
 ```  
   
-**1.2.1** If you have `docker-compose` installed, you can run the following commands instead:  
+**1.2** Next, build the Docker image: 
+```  
+cd /media/docker/wago_aws_greengrass_docker-main
+docker build -t wago/aws_greengrass_core . 
 ```
-cd ~/Downloads/aws-greengrass-docker-2.1.0 
-docker-compose -f docker-compose.yml build        
- ```
-     
- * **Note**: If you want to provision the device upon startup for cloud deployments, you will need to add the following lines to your docker-compose file to mount your AWS credentials into the container to be picked up at `/root/.aws/credentials` . Ensure that the `:ro` suffix is present at the end of the command to ensure read-only access.  
-  
-	```
-	environment:  
-	 - PROVISION=true
-	volumes:  
-	 - /path/to/credential/directory/:/root/.aws/:ro
-	 ```
-  
-* **WARNING**: We strongly recommend removing this credential file from your host after the initial setup, as further authorization will be handled by the Greengrass Token Exchange Service using X.509 certificates. For more information, [see how Greengrass interacts with AWS services](
-https://docs.aws.amazon.com/greengrass/v2/developerguide/interact-with-aws-services.html ) .
-  
-* If you would like to override any of the default configuration options or use your own config file to start Greengrass, specify those environment variables in the `environment` section as well. If you wish to use your own init config file, you must mount it to the directory you specify in the `INIT_CONFIG` environment variable, as well as mounting any extra files (e.g. custom certificates) you refer to in the init config file.  
-Please see [the installer documentation](https://docs.aws.amazon.com/greengrass/v2/developerguide/configure-installer.html ) for configuration options and behavior. 
-
-  
-**1.3**  Verify that the Greengrass Docker image was built.  
+### Step 2. Running the AWS Greengrass Core container
+**2.0** Run the Container with the access to the Docker engine 
+Deploy other containers on the host device by mounting the Docker .sock and binaries.  Create YOUR ACCESS KEY ID and YOUR ACCESS KEY in AWS IAM, for the GGC_USER and GGC_GROUP you may nee dto use "root":
 ```  
-docker images  
-REPOSITORY                          TAG                 IMAGE ID            CREATED             SIZE  
-x86-64/aws-iot-greengrass           2.1.0               3f152d6707c8        17 seconds ago      695MB  
-```  
-  
-### Step 2. Run the Docker Container  
-#### On Linux or Mac OSX  
-
-**2.1** In the terminal, run the following command to run the container in interactive mode in the foreground:  
-  
+docker run -it --network=host \
+--restart=unless-stopped \
+--env AWS_ACCESS_KEY_ID=<YOUR ACCESS KEY ID> \
+--env AWS_SECRET_ACCESS_KEY=<YOUR ACCESS KEY>\
+--env AWS_REGION=<YOUR AWS REGION> \
+--env THING_NAME=<YOUR GREENGRASS CORE NAME> \
+--env THING_GROUP_NAME=<YOUR GREENGRASS CORE GROUP NAME> \
+--env GGC_USER=<GREENGRASS CORE USER> \
+--env GGC_GROUP=<GREENGRASS CORE GROUP> \
+-v /var/run/docker.sock:/var/run/docker.sock \
+-v /usr/bin/docker:/usr/bin/docker \
+wago/aws_greengrass_core
 ```
-docker run --init -it --name aws-iot-greengrass \  
-x86_64/aws-iot-greengrass:2.1.0  
-```
-* Replace `-it` with `-d`  to run this container in the background in [detached mode](https://docs.docker.com/engine/reference/run/#detached-vs-foreground).
-* **Note**: If you would like to provision your device for cloud deployments, use the following lines in the above command to mount your AWS credentials into the container to be picked up at `/root/.aws/credentials`. Ensure that the `:ro` suffix is present at the end of the command to ensure read-only access.  
-
-	```  
-	-e PROVISION=true \  
-	-v /path/to/credential/directory/:/root/.aws/:ro \  
-	``` 
-* **WARNING**: We strongly recommend removing this credential file from your host after the initial setup, as further authorization will be handled by the Greengrass Token Exchange Service using X.509 certificates. For more information, [see how Greengrass interacts with AWS services](
-https://docs.aws.amazon.com/greengrass/v2/developerguide/interact-with-aws-services.html ) . 
-  
-* If you would like to override any of the default configuration options or use your own config file to start Greengrass, specify those environment variables in the `environment` section as well. If you wish to use your own init config file, you must mount it to the directory you specify in the `INIT_CONFIG` environment variable, as well as mounting any extra files (e.g. custom certificates) you refer to in the init config file.  
-Please see [the installer documentation](https://docs.aws.amazon.com/greengrass/v2/developerguide/configure-installer.html ) for configuration options and behavior. 
-  
-  
-**2.1.1**  If you have `docker-compose` installed, you can run the following commands instead:  
-```  
-cd ~/Downloads/aws-greengrass-docker-2.1.0  
-docker-compose -f docker-compose.yml up  
-```  
-  
-**2.2** The output should look like this example:  
-```  
-Running Greengrass with the following options: -Droot=/greengrass/v2 -Dlog.store=FILE -Dlog.level= -jar /opt/greengrassv2/lib/Greengrass.jar --provision true --deploy-dev-tools false --aws-region us-east-1 --start false  
-Installing Greengrass for the first time...  
-...  
-...  
-Launching Nucleus...  
-Launched Nucleus successfully.  
-```  
-  
-### Debugging the Docker Container  
-To debug issues with the container, you can persist the runtime logs or attach an interactive shell.  
-  
-#### Persist Greengrass Runtime Logs outside the Greengrass Docker Container  
-You can run the AWS IoT Greengrass Docker container after bind-mounting the `/greengrass/v2/logs` directory to persist logs even after the container has exited or is removed. Alternatively, you can omit the `--rm` flag and use `docker cp` to copy the logs back from the container after it exits.  
-  
-  
-#### Attach an Interactive Shell to the Greengrass Docker Container  
-You can attach an interactive shell to a running AWS IoT Greengrass Docker container. This can help you to investigate the state of the Greengrass Docker container.  
-Either use `docker attach` or run the following command in the terminal.  
-```  
-docker exec -it container-name sh -c "YOUR_COMMAND > /proc/1/fd/1"  
-```  
-  * This ensures that all output is redirected to PID 1 and will show up in the docker logs.
-  
-### Stopping the Docker Container  
-To stop the AWS IoT Greengrass Docker Container, press Ctrl+C in your terminal (interactive mode) or run `docker stop` or `docker-compose stop` (detached mode). 
-  
-This action will send SIGTERM to the Greengrass process to gracefully shut down down the Greengrass process and all subprocesses that were started. The Docker container is initialized with the docker-init executable as process PID 1, which helps in removing any leftover zombie processes. For more information, see the [Docker documentation for init](https://docs.docker.com/engine/reference/run/#specify-an-init-process).
-
-You may use `docker start` or `docker-compose start` to restart a stopped container.
-
-### Removing the Docker Container
-
-If you have not specified the `--rm` flag in your `docker run` command, your container will remain in the STOPPED state on your host. Use `docker rm` or `docker-compose down` to remove your container.
+### This is currently beta
+Please provide feedback on this as you come accross it. If you wish to contribute please contact me directly.

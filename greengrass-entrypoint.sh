@@ -22,13 +22,9 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-set -e
-
 #Disable job control so that all child processes run in the same process group as the parent
 set +m
 
-# Path that initial installation files are copied to
-INIT_JAR_PATH=/opt/greengrassv2
 #Default options
 OPTIONS="-Droot="/greengrass/v2" -Dlog.store=FILE -jar /GreengrassCore/lib/Greengrass.jar --aws-region ${AWS_REGION} --thing-name ${THING_NAME} --thing-group-name ${THING_GROUP_NAME} --component-default-user ${GGC_USER}:${GGC_GROUP} --provision true --setup-system-service false --deploy-dev-tools true"
 
@@ -41,11 +37,4 @@ else
 	echo "Reusing existing Greengrass installation..."
 fi
 
-#Make loader script executable
-echo "Making loader script executable..."
-chmod +x $GGC_ROOT_PATH/alts/current/distro/bin/loader
-
 echo "Starting Greengrass..."
-
-# Start greengrass kernel via the loader script and register container as a thing
-exec $GGC_ROOT_PATH/alts/current/distro/bin/loader
