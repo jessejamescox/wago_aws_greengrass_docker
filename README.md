@@ -1,16 +1,8 @@
 
-# Running AWS IoT Greengrass V2 in a Docker Container  
-## Overview  
-AWS IoT Greengrass can run in a Docker container. You can use the Dockerfile in this package to build a container image that runs on `x86_64` platforms.   
-  
-This guide will show you how to:  
- * Build a Docker image from the Dockerfile for Amazon Linux 2 `x86_64`.  
- * Run an Amazon Linux Docker image containing AWS IoT Greengrass V2.
- * Use `docker-compose` to build and run AWS IoT Greengrass V2 in the Docker container.  
- * The Docker image supports Mac OSX, and Linux as Docker host platforms to run the Greengrass core software.  
+# Running AWS IoT Greengrass Core V2 on WAGO Quad-Core ARM Platform Docker Container  
   
 ## Prerequisites  
-* Mac OSX or Linux host computer running Docker and Docker Compose (optional).  
+* WAGO Edge Controller, WAGO TP600, or WAGO Edge Computer with Docker Engine installed 
  * The Docker installation (version 18.09 or later) can be found [here](https://docs.docker.com/install/ ).
  * The Docker Compose installation (version 1.22 or later) can be found [here]( https://docs.docker.com/compose/install/).
    Docker for Mac OS and Docker Toolbox include Compose, so those platforms don't need a separate Compose installation. Note: You must have version 1.22 or later because `init` support is required.  
