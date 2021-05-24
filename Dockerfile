@@ -20,7 +20,7 @@
 # OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 # SOFTWARE.
 
-FROM ubuntu
+FROM debian
 
 # Author
 LABEL maintainer="Jesse Cox - WAGO USA"
@@ -51,10 +51,12 @@ COPY "greengrass-entrypoint.sh" /
 COPY "${GREENGRASS_ZIP_SHA256}" /
 
 # Install Greengrass v2 dependencies
-RUN apt install build-essential zlib1g-dev libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev \
-    libffi-dev wget curl python3-pip git software-properties-common default-jdk unzip -y && \ 
+RUN apt update && apt upgrade -y && apt install build-essential zlib1g-dev \
+    libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget \
+    curl python3-pip git software-properties-common default-jdk unzip -y && \ 
     wget $GREENGRASS_RELEASE_URI && sha256sum -c ${GREENGRASS_ZIP_SHA256} && \
     chmod +x /greengrass-entrypoint.sh && \
-    mkdir -p /opt/greengrassv2 $GGC_ROOT_PATH && unzip $GREENGRASS_ZIP_FILE -d /opt/greengrassv2 && rm $GREENGRASS_ZIP_FILE && rm $GREENGRASS_ZIP_SHA256
+    mkdir -p /opt/greengrassv2 $GGC_ROOT_PATH && unzip $GREENGRASS_ZIP_FILE -d /opt/greengrassv2 && \
+    rm $GREENGRASS_ZIP_FILE && rm $GREENGRASS_ZIP_SHA256
 
 ENTRYPOINT ["/greengrass-entrypoint.sh"]
