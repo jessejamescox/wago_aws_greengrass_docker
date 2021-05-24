@@ -10,7 +10,7 @@
 ## Running AWS IoT Greengrass in a Docker Container  
 The following steps show how to build the Docker image from the Dockerfile and configure AWS IoT Greengrass to run in a Docker container.  
   
-Note: If you have `docker-compose` installed, you can simply run `docker-compose up --build` from the unzipped directory for a quick build and basic installation, without device provisioning.   
+  
   
 ### Step 1. Build the AWS IoT Greengrass Docker Image  
 #### On Linux or Mac OSX  

@@ -33,17 +33,17 @@ ARG GREENGRASS_ZIP_SHA256=${GREENGRASS_ZIP_FILE}.sha256
 
 # Set up Greengrass v2 execution parameters
 # TINI_KILL_PROCESS_GROUP allows forwarding SIGTERM to all PIDs in the PID group so Greengrass can exit gracefully
-ENV TINI_KILL_PROCESS_GROUP=1 \ 
-    GGC_ROOT_PATH=/greengrass/v2 \
-    PROVISION=false \
-    AWS_REGION=us-west-2 \
-    THING_NAME=default_thing_name \
-    THING_GROUP_NAME=default_thing_group_name \
-    TES_ROLE_NAME=default_tes_role_name \
-    TES_ROLE_ALIAS_NAME=default_tes_role_alias_name \
-    COMPONENT_DEFAULT_USER=default_component_user \
-    DEPLOY_DEV_TOOLS=false \
-    INIT_CONFIG=default_init_config
+#ENV TINI_KILL_PROCESS_GROUP=1 \ 
+ENV GGC_ROOT_PATH=/greengrass/v2
+#    PROVISION=false \
+#    AWS_REGION=us-west-2 \
+#    THING_NAME=default_thing_name \
+#    THING_GROUP_NAME=default_thing_group_name \
+#    TES_ROLE_NAME=default_tes_role_name \
+#    TES_ROLE_ALIAS_NAME=default_tes_role_alias_name \
+#    COMPONENT_DEFAULT_USER=default_component_user \
+#    DEPLOY_DEV_TOOLS=false \
+#    INIT_CONFIG=default_init_config
 RUN env
 
 # Entrypoint script to install and run Greengrass
