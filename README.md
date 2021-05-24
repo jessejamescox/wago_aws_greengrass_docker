@@ -3,18 +3,14 @@
   
 ## Prerequisites  
 * WAGO Edge Controller, WAGO TP600, or WAGO Edge Computer with Docker Engine installed 
- * The Docker installation (version 18.09 or later) can be found [here](https://docs.docker.com/install/ ).
- * The Docker Compose installation (version 1.22 or later) can be found [here]( https://docs.docker.com/compose/install/).
-   Docker for Mac OS and Docker Toolbox include Compose, so those platforms don't need a separate Compose installation. Note: You must have version 1.22 or later because `init` support is required.  
+* The Docker Engine ipk (version 20.10 or later) can be found [here](https://github.com/WAGO/docker-ipk ).
   
 ## Running AWS IoT Greengrass in a Docker Container  
 The following steps show how to build the Docker image from the Dockerfile and configure AWS IoT Greengrass to run in a Docker container.  
   
   
   
-### Step 1. Build the AWS IoT Greengrass Docker Image  
-#### On Linux or Mac OSX  
-  
+### Step 1. Build the AWS IoT Greengrass Docker Image    
 **1.1** Download and decompress the `aws-greengrass-docker-2.1.0` package.  
   
 **1.2** In a terminal, run the following commands in the location where you decompressed the `aws-greengrass-docker-2.1.0` package.  

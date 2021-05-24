@@ -30,15 +30,12 @@ set +m
 # Path that initial installation files are copied to
 INIT_JAR_PATH=/opt/greengrassv2
 #Default options
-OPTIONS="-Droot="/greengrass/v2" -Dlog.store=FILE -jar ./GreengrassCore/lib/Greengrass.jar --aws-region ${AWS_REGION} --thing-name ${THING_NAME} --thing-group-name ${THING_GROUP_NAME} --component-default-user ${GGC_USER}:${GGC_GROUP} --provision true --setup-system-service false --deploy-dev-tools true"
-# OPTIONS="-Droot=${GGC_ROOT_PATH} -Dlog.store=FILE -Dlog.level=${LOG_LEVEL} -jar ${INIT_JAR_PATH}/lib/Greengrass.jar --provision ${PROVISION} --deploy-dev-tools ${DEPLOY_DEV_TOOLS} --aws-region ${AWS_REGION} --start false"
+OPTIONS="-Droot="/greengrass/v2" -Dlog.store=FILE -jar /GreengrassCore/lib/Greengrass.jar --aws-region ${AWS_REGION} --thing-name ${THING_NAME} --thing-group-name ${THING_GROUP_NAME} --component-default-user ${GGC_USER}:${GGC_GROUP} --provision true --setup-system-service false --deploy-dev-tools true"
 
 # If we have not already installed Greengrass
 if [ ! -d $GGC_ROOT_PATH/alts/current/distro ]; then
 	# Install Greengrass via the main installer, but do not start running
 	echo "Installing Greengrass for the first time..."
-	modify_sudoers
-	parse_options
 	java ${OPTIONS}
 else
 	echo "Reusing existing Greengrass installation..."
