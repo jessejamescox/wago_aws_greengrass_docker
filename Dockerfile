@@ -21,6 +21,7 @@
 # SOFTWARE.
 
 FROM debian
+TARGETPLATFORM linux/arm32v7
 
 # Author
 LABEL maintainer="Jesse Cox - WAGO USA"
