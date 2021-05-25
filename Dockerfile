@@ -22,9 +22,6 @@
 
 FROM debian
 
-ARG TARGETPLATFORM
-ENV TARGETPLATFORM=${TARGETPLATFORM:-linux/arm32v7}
-
 # Author
 LABEL maintainer="Jesse Cox - WAGO USA"
 
