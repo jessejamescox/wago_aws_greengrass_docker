@@ -1,5 +1,5 @@
 
-# Running AWS IoT Greengrass Core V2 on WAGO Quad-Core ARM Platform Docker Container  
+# Running AWS IoT Greengrass Core V2 in Docker on WAGO Quad-Core ARM Platform
   
 ## Prerequisites  
 * WAGO Edge Controller or WAGO TP600 with Docker Engine installed 
