@@ -23,7 +23,7 @@
 FROM debian
 
 # Author
-LABEL maintainer="Jesse Cox - WAGO Corp. USA"
+LABEL maintainer="Jesse Cox - WAGO USA"
 
 # Replace the args to lock to a specific version
 ARG GREENGRASS_RELEASE_URI=https://d2s8p88vqu9w66.cloudfront.net/releases/greengrass-nucleus-latest.zip
