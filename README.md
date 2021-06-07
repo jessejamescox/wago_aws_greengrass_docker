@@ -34,7 +34,6 @@ docker run -it --network=host \
 --env GGC_USER=<GREENGRASS CORE USER> \
 --env GGC_GROUP=<GREENGRASS CORE GROUP> \
 -v /var/run/docker.sock:/var/run/docker.sock \
--v /usr/bin/docker:/usr/bin/docker \
 wago/aws_greengrass_core
 ```
 ### This is currently beta
