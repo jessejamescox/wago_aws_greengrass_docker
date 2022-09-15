@@ -38,11 +38,14 @@ COPY "greengrass-entrypoint.sh" /
 # install Greengrass v2 dependencies
 RUN apt update && apt upgrade -y && apt install build-essential zlib1g-dev \
     libncurses5-dev libgdbm-dev libnss3-dev libssl-dev libreadline-dev libffi-dev wget \
-    curl python3-pip git software-properties-common default-jdk unzip -y
+    curl python3-pip git software-properties-common default-jdk unzip sudo -y
 
 # download and extract the runtime files    
 RUN curl -s ${GREENGRASS_RELEASE_URI} > \
     greengrass-nucleus-latest.zip && unzip greengrass-nucleus-latest.zip -d GreengrassCore &&\
     rm /greengrass-nucleus-latest.zip  && chmod +x /greengrass-entrypoint.sh
+
+RUN useradd ggc_user && groupadd ggc_group
+RUN echo 'ggc_user  ALL=(ALL:ALL) ALL' >> /etc/sudoers
 
 ENTRYPOINT ["/greengrass-entrypoint.sh"]
